@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smash Bros Monopoly</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-select.min.js"></script>
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="font/stylesheet.css" rel="stylesheet" />
+    <link href="css/monopoly.css" rel="stylesheet" />
+</head>
+<body onload="loadImages()">
+    <div class="content">
+        <div id="setup_div">
+            <img src="top_image.png" height="200px" />
+            <br />
+            Welcome to Smash Monopoly!
+            <br /><br />
+            Please enter player names:
+            <br /><br />
+            <div style="width:500px;text-align:left;margin:0 auto;">
+                <div class="hidden" id="player_tokens">
+                    <option value="assisttrophey" data-content="<img width='50px' src='tokens/assisttrophey.png' />">Assist Trophey</option>
+                    <option value="crate" data-content="<img width='50px' src='tokens/crate.png' />">Create</option>
+                    <option value="homerunbat" data-content="<img width='50px' src='tokens/homerunbat.png' />">Homerun Bat</option>
+                    <option value="pokeball" data-content="<img width='50px' src='tokens/pokeball.png' />">Pokeball</option>
+                    <option value="smartbomb" data-content="<img width='50px' src='tokens/smartbomb.png' />">Smart Bomb</option>
+                    <option value="smashball" data-content="<img width='50px' src='tokens/smashball.png' />">Smash Ball</option>
+                </div>
+                Player 1
+                <br />
+                <input style="width:70%" type="text" id="player_0" value="Player 1" /><select class="player_token_select" data-width="100px" style="width:25%" id="player_0_icon"></select>
+                <br /><br />
+                Player 2
+                <br />
+                <input style="width:70%" type="text" id="player_1" value="Player 2" /><select class="player_token_select" data-width="100px" style="width:25%" id="player_1_icon"></select>
+                <br /><br />
+                Player 3
+                <br />
+                <input style="width:70%" type="text" id="player_2" placeholder="Optional" value="Player 3" /><select class="player_token_select" data-width="100px" style="width:25%" id="player_2_icon"></select>
+                <br /><br />
+                Player 4
+                <br />
+                <input style="width:70%" type="text" id="player_3" placeholder="Optional" value="Player 4" /><select class="player_token_select" data-width="100px" style="width:25%" id="player_3_icon"></select>
+                <!--<br /><br />
+                Board Type
+                <br />
+                <select name="board_choice">
+                    <option>Classic Board</option>
+                    <option disabled="disabled">Randomised Board</option>
+                </select>-->
+                <br /><br />
+                <button onclick="configureGame()" class="button-1" type="button">Start Game</button>
+            </div>
+
+        </div>
+        <div id="game_div" class="hidden"">
+            <div style="width:100%;height:1000px;position:relative;">
+                <div style="float:left;width:200px;margin-right:40px;">
+                    <div style="height:500px;">
+                        <div style="font-size:25px;background-color:#cde6d0;" class="player" data-number="0">
+                            <div class="owned_characters"></div>
+                        </div>
+                    </div>
+                    <div style="font-size:25px;background-color:#cde6d0;" class="player hidden" data-number="2">
+                        <div class="owned_characters"></div>
+                    </div>
+                </div>
+                <div id="top_board">
+                    <button style="margin-top:20px;" type="button" onclick="randomiseBoard()" class="button-1">Randomise!</button>
+                </div>
+                <div id="left_board">
+                    <div style="height:50%;width:100%;" id="p0name">
+                        <div class="settings_div" id="p0settings"></div>
+                    </div>
+                    <div style="height:50%;width:100%;" id="p2name">
+                        <div class="settings_div" id="p2settings"></div>
+                    </div>
+                </div>
+                <canvas id="game">
+
+                </canvas>
+                <div id="right_board">
+                    <div style="height:50%;width:100%;" id="p1name">
+                        <div class="settings_div" id="p1settings"></div>
+                    </div>
+                    <div style="height:50%;width:100%;" id="p3name">
+                        <div class="settings_div" id="p3settings"></div>
+                    </div>
+                </div>
+                <div id="bottom_board">
+                    <div class="roll">
+                        <div style="height:50px;">
+                            <button type="button" id="roll_dice" onclick="rollDice()" class="roll button-1">Roll Dice</button>
+                        </div>
+                        <div style="display:flex">
+                            <div class="die_face" id="die_1">
+                                <span class="pip"></span>
+                            </div>
+
+                            <div style="margin-left:10px;" class="die_face" id="die_2">
+                                <span class="pip"></span>
+                                <span class="pip"></span>
+                                <span class="pip"></span>
+                                <span class="pip"></span>
+                                <span class="pip"></span>
+                                <span class="pip"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="win hidden">
+                        Who won?<br />
+                        <button style="display:inline-block;" class="button-1" onclick="Win(0)" id="p0button"></button>
+                        <button style="display:inline-block;" class="button-1" onclick="Win(1)" id="p1button"></button>
+                        <button style="display:inline-block;" class="button-1 hidden" onclick="Win(2)" id="p2button"></button>
+                        <button style="display:inline-block;" class="button-1 hidden" onclick="Win(3)" id="p3button"></button>
+                    </div>
+
+
+                </div>
+
+
+                <div style="float:left;width:200px;margin-left:40px;">
+                    <div style="height:500px;">
+                        <div style="font-size:25px;background-color:#cde6d0;" class="player" data-number="1">
+                            <div class="owned_characters"></div>
+                        </div>
+                    </div>
+                    <div style="font-size:25px;background-color:#cde6d0;" class="player hidden" data-number="3">
+                        <div class="owned_characters"></div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <input id="override" type="text" /><!--<button >Roll Dice</button>-->
+            <span id="roll_result"></span>
+            <br />
+
+        </div>
+    </div>
+</body>
+<script src="js/monopoly.js"></script>
+</html>
